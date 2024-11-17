@@ -3,24 +3,26 @@ import pandas as pd
 import os
 
 def pdf_to_excel(pdf_path, excel_path):
-    """Extract tables from PDF and save them to an Excel file."""
+    """Extract tables from PDF and save them into one Excel sheet."""
     with pdfplumber.open(pdf_path) as pdf:
         all_tables = []
+
         for page in pdf.pages:
             tables = page.extract_tables()
             for table in tables:
-                # Convert to DataFrame and append to list
+                # Convert each table to DataFrame and append to list
                 df = pd.DataFrame(table[1:], columns=table[0])
                 all_tables.append(df)
 
-        # Write all tables to an Excel file
-        with pd.ExcelWriter(excel_path) as writer:
-            for i, df in enumerate(all_tables):
-                df.to_excel(writer, sheet_name=f'Table_{i+1}', index=False)
+        # Combine all tables into one DataFrame
+        combined_df = pd.concat(all_tables, ignore_index=True)
+
+        # Save the combined DataFrame to Excel
+        combined_df.to_excel(excel_path, index=False)
         print(f"Converted {pdf_path} to {excel_path}")
 
 def convert_all_pdfs_in_folder(folder_path):
-    """Converts all PDF files in the specified folder to Excel files."""
+    """Converts all PDF files in the specified folder to one Excel file each."""
     for filename in os.listdir(folder_path):
         if filename.endswith(".pdf"):
             pdf_path = os.path.join(folder_path, filename)
