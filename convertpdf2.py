@@ -30,5 +30,5 @@ def convert_all_pdfs_in_folder(folder_path):
             pdf_to_excel(pdf_path, excel_path)
 
 # Replace 'path/to/your/folder' with the path to the folder containing your PDFs
-folder_path = 'X:\Python\input'
+folder_path = "X:\Python\Bot\input"
 convert_all_pdfs_in_folder(folder_path)
